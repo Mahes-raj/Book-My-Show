@@ -14,7 +14,9 @@ pipeline {
 
         stage('Checkout from Git') {
             steps {
-                git branch: 'main', url: 'https://github.com/Mahes-raj/Bms.git'
+                git branch: 'main',
+                    credentialsId: 'github-token', // <-- Add your Jenkins GitHub credentials ID
+                    url: 'https://github.com/Mahes-raj/Book-My-Show.git'
                 sh 'ls -la'
             }
         }
