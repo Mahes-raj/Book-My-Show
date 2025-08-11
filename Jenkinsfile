@@ -1,8 +1,8 @@
 pipeline {
     agent any
     tools {
-        jdk 'jdk17'
-        nodejs 'node23'
+        jdk 'jdk21'
+        nodejs 'node24'
     }
 
     stages {
@@ -14,7 +14,7 @@ pipeline {
 
         stage('Checkout from Git') {
             steps {
-                git branch: 'main', url: 'https://github.com/KastroVKiran/Book-My-Show.git'
+                git branch: 'main', url: 'https://github.com/Mahes-raj/Bms.git'
                 sh 'ls -la'
             }
         }
@@ -22,13 +22,13 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh '''
-                cd bookmyshow-app
+                cd Book-My-Show
                 ls -la
                 if [ -f package.json ]; then
                     rm -rf node_modules package-lock.json
                     npm install
                 else
-                    echo "Error: package.json not found in bookmyshow-app!"
+                    echo "Error: package.json not found in Book-My-Show!"
                     exit 1
                 fi
                 '''
@@ -41,10 +41,10 @@ pipeline {
                     withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
                         sh '''
                         echo "Building Docker image..."
-                        docker build --no-cache -t kastrov/bms:latest -f bookmyshow-app/Dockerfile bookmyshow-app
+                        docker build --no-cache -t mahesraj/bms:latest -f Book-My-Show/Dockerfile Book-My-Show
 
                         echo "Pushing Docker image to registry..."
-                        docker push kastrov/bms:latest
+                        docker push mahesraj/bms:latest
                         '''
                     }
                 }
@@ -59,7 +59,7 @@ pipeline {
                 docker rm bms || true
 
                 echo "Running new container on port 3000..."
-                docker run -d --restart=always --name bms -p 3000:3000 kastrov/bms:latest
+                docker run -d --restart=always --name bms -p 3000:3000 mahesraj/bms:latest
 
                 echo "Checking running containers..."
                 docker ps -a
