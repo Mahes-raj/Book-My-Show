@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         GIT_CREDENTIALS = 'github-token'   // GitHub credentials in Jenkins
-        DOCKER_CREDENTIALS = 'docker'      // Docker Hub credentials in Jenkins
+        
         IMAGE_NAME = 'mahesraj/bms:latest' // Docker image name
         APP_PORT = '3000'                  // Internal app port
         HOST_PORT = '3000'                 // External port
@@ -24,7 +24,7 @@ pipeline {
         stage('Checkout from Git') {
             steps {
                 git branch: 'main',
-                    credentialsId: "${GIT_CREDENTIALS}",
+                    credentialsId: "docker",
                     url: 'https://github.com/Mahes-raj/Book-My-Show.git'
                 sh 'ls -la'
             }
